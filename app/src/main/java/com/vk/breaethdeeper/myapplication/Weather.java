@@ -1,11 +1,22 @@
 package com.vk.breaethdeeper.myapplication;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by mixmax on 17.02.16.
  */
-public class Weather implements Serializable {
+public class Weather implements Parcelable {
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+
+        public Weather createFromParcel(Parcel in) {
+            return new Weather(in);
+        }
+
+        public Weather[] newArray(int size) {
+            return new Weather[size];
+        }
+    };
     private String id;
     private String main;
     private String description;
@@ -16,6 +27,16 @@ public class Weather implements Serializable {
         this.main = main;
         this.description = description;
         this.icon = icon;
+    }
+
+    public Weather(Parcel in) {
+        String[] data = new String[4];
+        in.readStringArray(data);
+
+        this.id = data[0];
+        this.main = data[1];
+        this.description = data[2];
+        this.icon = data[3];
     }
 
     public String getId() {
@@ -58,5 +79,17 @@ public class Weather implements Serializable {
                 ", description='" + description + '\'' +
                 ", icon='" + icon + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{getId(), getMain(), getDescription(), getIcon()});
+
+
     }
 }

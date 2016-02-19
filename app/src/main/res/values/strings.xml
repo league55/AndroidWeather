@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="welcomeText">Enter your city</string>
+    <string name="confirm">Confirm</string>
 </resources>
