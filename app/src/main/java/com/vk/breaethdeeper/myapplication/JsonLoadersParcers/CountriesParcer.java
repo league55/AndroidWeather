@@ -23,7 +23,7 @@ import java.util.Set;
 public class CountriesParcer {
 
 
-    private void doParse(SQLiteDatabase db, Context c, String assetName) {
+    public void loadCountriesToDB(SQLiteDatabase db, Context c, String assetName) {
         Map<String, String> countries = null;
 
         countries = loadCountriesJSONFromAsset(c, assetName);
@@ -35,14 +35,14 @@ public class CountriesParcer {
             long retvalue = 0;
 
             values.put("name", countries.get(key));
-            values.put("code", key);
+            values.put("country_code", key);
             Log.i("DB", key + " - " + countries.get(key));
             retvalue = db.insertWithOnConflict("countries", null, values, SQLiteDatabase.CONFLICT_NONE);
         }
 
     }
 
-    public ArrayMap<String, String> loadCountriesJSONFromAsset(Context c, String assetName) {
+    private ArrayMap<String, String> loadCountriesJSONFromAsset(Context c, String assetName) {
         String json = null;
         ArrayMap<String, String> countriesName = null;
         try {

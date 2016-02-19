@@ -1,5 +1,6 @@
 package com.vk.breaethdeeper.myapplication.JsonLoadersParcers;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,14 +14,41 @@ import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.MappingJsonFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by mixmax on 19.02.16.
  */
 public class CitiesParser {
-    Map<Integer, String> citiesName = new ArrayMap<>(209600);
-    Map<Integer, String> citiesCountry = new ArrayMap<>(209600);
+    private Map<Integer, String> citiesName = new ArrayMap<>(209600);
+    private Map<Integer, String> citiesCountriesCode = new ArrayMap<>(209600);
+
+
+    public void loadCitiesToDB(SQLiteDatabase db, Context c, String assetName, ArrayList<String> countryCodes) throws IOException {
+        Map<Integer, String> cities = null;
+
+        cities = loadCitiesJSONFromAsset(c, assetName);
+
+
+        Set<Integer> keySet = cities.keySet();
+
+        for (Integer key : keySet) {
+            if (countryCodes.contains(citiesCountriesCode.get(key))) {
+
+                ContentValues values = new ContentValues();
+                long retvalue = 0;
+                values.put("id", key);
+                values.put("name", cities.get(key));
+                values.put("country_code", citiesCountriesCode.get(key));
+                Log.i("DB", key + " - " + cities.get(key));
+                retvalue = db.insertWithOnConflict("cities", null, values, SQLiteDatabase.CONFLICT_NONE);
+            }
+
+        }
+    }
+
 
     private String[] parseCities(SQLiteDatabase db) {
         Cursor c = db.query("cities", null, null, null, null, null, null);
@@ -49,7 +77,7 @@ public class CitiesParser {
         return cities_name_db;
     }
 
-    private Map<Integer, String> parseCities(Context c, String assetName) throws IOException {
+    private Map<Integer, String> loadCitiesJSONFromAsset(Context c, String assetName) throws IOException {
         JsonFactory f = new MappingJsonFactory();
         JsonParser jp = f.createJsonParser(c.getAssets().open(assetName));
 
@@ -76,7 +104,7 @@ public class CitiesParser {
                         Log.i("DB", "id: " + node.get("_id").asText() + node.get("name").asText() + node.get("country").asText());
 
                         this.citiesName.put(node.get("_id").asInt(), node.get("name").asText());
-                        this.citiesCountry.put(node.get("_id").asInt(), node.get("country").asText());
+                        this.citiesCountriesCode.put(node.get("_id").asInt(), node.get("country").asText());
 
                     }
                     Log.i("DB", "parcing complite");
