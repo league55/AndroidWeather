@@ -20,6 +20,8 @@ import java.util.Set;
 
 /**
  * Created by mixmax on 19.02.16.
+ * was used to get cities from JSON and upload to SQL  (for selecting cities using spinners)
+ * deprecated because of being too slow
  */
 public class CitiesParser {
     private Map<Integer, String> citiesName = new ArrayMap<>(209600);

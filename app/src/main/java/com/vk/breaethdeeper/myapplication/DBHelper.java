@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 /**
  * Created by mixmax on 18.02.16.
+ *  was used to get countries from JSON and upload to SQL (for selecting cities using spinners)
+ * deprecated because of being too slow
  */
 public class DBHelper extends SQLiteOpenHelper {
 

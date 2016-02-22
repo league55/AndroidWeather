@@ -20,6 +20,7 @@ import java.net.URL;
 
 /**
  * Created by mixmax on 19.02.16.
+ * gets current weather from web
  */
 public class WeatherParcer extends AsyncTask<String, Void, Weather> {
     private int result = 0;
@@ -105,21 +106,28 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
             JSONObject mainPart = (JSONObject) response.get("main");
             JSONObject wind = (JSONObject) response.get("wind");
 
-            String id = ob.getString("id");
-            String main = ob.getString("main");
-            String description = ob.getString("description");
-            String temp = mainPart.getString("temp");
-            String pressure = mainPart.getString("pressure");
-            String humidity = mainPart.getString("humidity");
-            String windSpeed = wind.getString("speed");
-            String cityName = response.getString("name");
-            String icon = ob.getString("icon");
+            int code = response.getInt("cod");
 
-            weather = new Weather(id, main, description, temp, pressure, humidity, windSpeed, cityName, icon);
+            if (code != 200) {
+                return new Weather(code);
+            } else {
 
+                String id = ob.getString("id");
+                String main = ob.getString("main");
+                String description = ob.getString("description");
+                String temp = mainPart.getString("temp");
+                String pressure = mainPart.getString("pressure");
+                String humidity = mainPart.getString("humidity");
+                String windSpeed = wind.getString("speed");
+                String cityName = response.getString("name");
+                String icon = ob.getString("icon");
+
+                weather = new Weather(id, main, description, temp, pressure, humidity, windSpeed, cityName, icon, code);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         return weather;
     }
 

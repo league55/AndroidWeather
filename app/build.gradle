@@ -31,4 +31,5 @@ dependencies {
     compile 'junit:junit:4.8'
     compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+    compile 'com.android.support:support-v4:23.1.1'
 }

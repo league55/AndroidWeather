@@ -1,11 +1,26 @@
 package com.vk.breaethdeeper.myapplication;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
 /**
  * Created by mixmax on 17.02.16.
  */
-public class Weather {
+public class Weather implements Parcelable {
 
 
+    public static final Parcelable.Creator<Weather> CREATOR = new Parcelable.Creator<Weather>() {
+        // распаковываем объект из Parcel
+        public Weather createFromParcel(Parcel in) {
+            Log.d("Weather", "createFromParcel");
+            return new Weather(in);
+        }
+
+        public Weather[] newArray(int size) {
+            return new Weather[size];
+        }
+    };
     public String main;
     private String id;
     private String description;
@@ -15,8 +30,9 @@ public class Weather {
     private String windSpeed;
     private String cityName;
     private String icon;
+    private int code;
 
-    public Weather(String id, String main, String description, String temp, String pressure, String humidity, String windSpeed, String cityName, String icon) {
+    public Weather(String id, String main, String description, String temp, String pressure, String humidity, String windSpeed, String cityName, String icon, int code) {
         this.id = id;
         this.main = main;
         this.description = description;
@@ -26,6 +42,28 @@ public class Weather {
         this.windSpeed = windSpeed;
         this.cityName = cityName;
         this.icon = icon;
+        this.code = code;
+    }
+
+    // конструктор, считывающий данные из Parcel
+    private Weather(Parcel parcel) {
+        Log.d("Weather", "Weather(Parcel parcel)");
+
+        this.id = parcel.readString();
+        this.main = parcel.readString();
+        this.description = parcel.readString();
+        this.temp = parcel.readString();
+        this.pressure = parcel.readString();
+        this.humidity = parcel.readString();
+        this.windSpeed = parcel.readString();
+        this.cityName = parcel.readString();
+        this.icon = parcel.readString();
+        this.code = parcel.readInt();
+    }
+
+
+    public Weather(int code) {
+        this.code = code;
     }
 
     public String getId() {
@@ -100,6 +138,14 @@ public class Weather {
         this.icon = icon;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
         return "Weather{" +
@@ -152,4 +198,26 @@ public class Weather {
         result = 31 * result + (icon != null ? icon.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    // упаковываем объект в Parcel
+    public void writeToParcel(Parcel parcel, int flags) {
+        Log.d("Weather", "writeToParcel");
+        parcel.writeString(id);
+        parcel.writeString(main);
+        parcel.writeString(description);
+        parcel.writeString(temp);
+        parcel.writeString(pressure);
+        parcel.writeString(humidity);
+        parcel.writeString(windSpeed);
+        parcel.writeString(cityName);
+        parcel.writeString(icon);
+        parcel.writeInt(code);
+    }
+
+
 }
