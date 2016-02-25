@@ -1,6 +1,5 @@
 package com.vk.breaethdeeper.myapplication.JsonLoadersParcers;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -25,9 +24,6 @@ import java.net.URL;
 public class WeatherParcer extends AsyncTask<String, Void, Weather> {
     private int result = 0;
 
-    public WeatherParcer(Activity a) {
-        // pDialog = new ProgressDialog(ShowWeather.this);
-    }
 
     @Override
     protected void onPreExecute() {
@@ -134,16 +130,6 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
     @Override
     protected void onPostExecute(Weather w) {
         super.onPostExecute(w);
-       /* if (pDialog.isShowing())
-            pDialog.dismiss();*/
 
-    /*     if (result == 1) {
-
-
-
-        } else {
-            Log.e("MainActivity", "Failed to fetch data!");
-        }
-*/
     }
 }

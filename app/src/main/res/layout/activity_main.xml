@@ -18,15 +18,18 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/confirmCity"
         android:layout_marginTop="39dp"
-        android:text="@string/welcomeText" />
+        android:text="@string/welcomeText"
+        android:textSize="@dimen/abc_text_size_body_1_material"
+        android:textStyle="normal" />
 
 
     <Button
         android:id="@+id/confirmCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/cbSaveCity"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="74dp"
         android:background="#ffffff"
         android:text="@string/confirm" />
 
@@ -37,7 +40,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tfWelcome"
-        android:layout_marginTop="50dp"
         android:editable="true" />
 
     <CheckBox
@@ -52,8 +54,9 @@
         android:id="@+id/spinner_lang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/confirmCity"
+        android:layout_below="@+id/cbSaveCity"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp" />
+        android:spinnerMode="dropdown"
+        android:textAlignment="center" />
 
 </RelativeLayout>

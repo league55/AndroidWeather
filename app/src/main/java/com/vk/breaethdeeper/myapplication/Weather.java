@@ -66,6 +66,9 @@ public class Weather implements Parcelable {
         this.code = code;
     }
 
+    public Weather() {
+    }
+
     public String getId() {
         return id;
     }

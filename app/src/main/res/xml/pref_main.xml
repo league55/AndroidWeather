@@ -17,7 +17,7 @@
 
         android:entries="@array/languages"
         android:entryValues="@array/lang_codes"
-        android:key="lang"
+        android:key="SAVED_LANG"
         android:title="@string/language" />
 
     <Preference android:title="@string/save">

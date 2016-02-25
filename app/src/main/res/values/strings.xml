@@ -29,8 +29,9 @@
     <string name="english" translatable="false">English</string>
     <string name="russian" translatable="false">Русский</string>
     <string name="spanish" translatable="false">Espanol</string>
-    <string name="ukrainian" translatable="false">Україньська</string>
+    <string name="ukrainian" translatable="false">Українська</string>
     <string name="save">Save</string>
     <string name="pref_city">City</string>
     <string name="language">Language</string>
+    <string name="refreshing">Refreshing</string>
 </resources>
