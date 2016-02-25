@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Погодка</string>
+    <string name="confirm">Вперед!</string>
+    <string name="please_wait">Секундочку...</string>
+    <string name="pref_header_general">Общие</string>
+    <string name="pref_header_notifications">Оповещания</string>
+    <string name="pref_ringtone_silent">Тихий</string>
+    <string name="remember_city">запомнить город</string>
+    <string name="settings">Настройки</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="welcomeText">Лучший в мире город:</string>
+    <string name="your_city">Лучшая погода в </string>
+    <string name="save">Сохранить</string>
+    <string name="pref_city">Город</string>
+    <string name="language">Язык</string>
+</resources>

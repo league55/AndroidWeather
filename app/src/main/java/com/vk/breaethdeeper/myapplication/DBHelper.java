@@ -20,8 +20,8 @@ import java.util.ArrayList;
 public class DBHelper extends SQLiteOpenHelper {
 
     Context c;
-    CountriesParcer countryP;
-    CitiesParser cityP;
+    private CountriesParcer countryP;
+    private CitiesParser cityP;
 
     public DBHelper(Context context) {
         // конструктор суперкласса
