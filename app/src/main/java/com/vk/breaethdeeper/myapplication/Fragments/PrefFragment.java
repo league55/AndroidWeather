@@ -23,12 +23,12 @@ public class PrefFragment extends PreferenceFragment implements Preference.OnPre
         super.onCreate(savedInstanceState);
 
 
-        addPreferencesFromResource(R.xml.pref_main);
+        addPreferencesFromResource(R.xml.preferences);
 
         Context context = null;
         if (isAdded()) {
             context = getActivity();
-            PreferenceManager.setDefaultValues(context, R.xml.pref_main, false);
+            PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 

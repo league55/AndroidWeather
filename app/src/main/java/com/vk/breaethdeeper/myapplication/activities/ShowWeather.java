@@ -1,6 +1,7 @@
 package com.vk.breaethdeeper.myapplication.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -11,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vk.breaethdeeper.myapplication.Fragments.PrefFragment;
 import com.vk.breaethdeeper.myapplication.JsonLoadersParcers.WeatherParcer;
 import com.vk.breaethdeeper.myapplication.R;
 import com.vk.breaethdeeper.myapplication.Weather;
@@ -25,6 +25,8 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
     private TextView weatherMainTV;
     private TextView weatherDescrTV;
     private TextView weatherTempTV;
+    private TextView windSpeedTV;
+    private TextView humidityTV;
     private WeatherHandler weatherHandler;
     private ProgressDialog pDialog;
 
@@ -44,7 +46,8 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
         weatherMainTV = (TextView) findViewById(R.id.tVmain);
         weatherDescrTV = (TextView) findViewById(R.id.tVdescription);
         weatherTempTV = (TextView) findViewById(R.id.tVtemp);
-
+        windSpeedTV = (TextView) findViewById(R.id.tVwindSpeed);
+        humidityTV = (TextView) findViewById(R.id.tVhuimdity);
 
         cityTV.setText(getString(R.string.your_city) + " " + weather.getCityName());
         update();
@@ -100,8 +103,8 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
         int id = item.getItemId();
         if (id == 1) {
             //startActivity(new Intent(this, SettingsActivity.class));
-            getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new PrefFragment()).commit();
+            Intent i = new Intent(this, AppPreferenceActivity.class);
+            startActivity(i);
             return true;
         }
 
@@ -118,7 +121,14 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
         cityTV.setText(getString(R.string.your_city) + " " + weather.getCityName());
 
         weatherDescrTV.setText(weather.getDescription());
-        weatherTempTV.setText(weather.getTemp() + "C");
+        float temp = Float.parseFloat(weather.getTemp());
+        temp = Math.round(temp);
+        weatherTempTV.setText(temp + "C");
+        windSpeedTV.setText(weather.getWindSpeed() + "m/s");
+
+
+        humidityTV.setText(weather.getHumidity() + "%");
+
 
         if (pDialog.isShowing())
             pDialog.dismiss();

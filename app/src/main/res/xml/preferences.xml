@@ -20,7 +20,9 @@
         android:key="SAVED_LANG"
         android:title="@string/language" />
 
-    <Preference android:title="@string/save">
+    <Preference
+        android:key="SAVE_PREF"
+        android:title="@string/save">
 
 
     </Preference>
