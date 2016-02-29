@@ -1,9 +1,10 @@
-package com.vk.breaethdeeper.myapplication;
+package com.vk.breaethdeeper.myapplication.jsonLoadersParcers;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 
-import com.vk.breaethdeeper.myapplication.JsonLoadersParcers.WeatherParcer;
+import com.vk.breaethdeeper.myapplication.models.Weather;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -20,7 +21,8 @@ public class WeatherHandler {
     }
 
     public Weather updateWeather(String URL, WeatherParcer wp, Weather oldWeather) {
-        Weather weather = new Weather();
+
+        Weather weather = oldWeather;
 
         if (hasConnection(context)) {
             wp.execute(URL);
@@ -33,6 +35,7 @@ public class WeatherHandler {
             }
 
             if (weather.getCode() == 200) {
+                Log.i("HANDLER", weather.toString() + "2");
                 return weather;
             } else if (weather.getCode() == 404) {
                 alertError("city wasn't found");
@@ -40,20 +43,22 @@ public class WeatherHandler {
                 alertError("something went wrong >.<" + weather.getCode());
             }
         } else {
+
             alertError("no internet connection");
         }
+        Log.i("HANDLER", "return oldWeather");
         return oldWeather;
     }
 
 
-    public void alertError(String msg) {
+    private void alertError(String msg) {
         new AlertDialog.Builder(context)
                 //  .setTitle(getResources().getString(R.string.app_name))
                 .setMessage(msg)
                 .setPositiveButton("OK", null).show();
     }
 
-    public boolean hasConnection(Context context) {
+    private boolean hasConnection(Context context) {
         Runtime runtime = Runtime.getRuntime();
         try {
 

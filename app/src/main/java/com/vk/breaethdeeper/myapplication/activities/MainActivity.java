@@ -18,14 +18,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.vk.breaethdeeper.myapplication.JsonLoadersParcers.WeatherParcer;
 import com.vk.breaethdeeper.myapplication.R;
-import com.vk.breaethdeeper.myapplication.Weather;
-import com.vk.breaethdeeper.myapplication.WeatherHandler;
+import com.vk.breaethdeeper.myapplication.jsonLoadersParcers.WeatherHandler;
+import com.vk.breaethdeeper.myapplication.models.Weather;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,12 +55,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getLanguaagesFromRes();
+        getLanguagesFromRes();
         sPref = getPreferences(MODE_PRIVATE);
         // wh = new WeatherHandler();
 
         if (sPref.contains(SAVED_LANG)) lang = sPref.getString(SAVED_LANG, "en");
         if (sPref.contains(SAVED_CITY)) cityName = sPref.getString(SAVED_CITY, "BoraBora");
+
+        if (!getIntent().getBooleanExtra("isForsed", false) && hasSavedWeather()) {
+            Intent intent = new Intent(this, ShowWeather.class);
+            // intent.putExtra("weather", weather);
+            URL = getURL();
+            intent.putExtra("URL", URL);
+            startActivity(intent);
+        }
 
         cbSaveCity = (CheckBox) findViewById(R.id.cbSaveCity);
         welcome = (TextView) findViewById(R.id.tfWelcome);
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         confirm.setOnClickListener(this);
 
+        if (cityName != null) EditTcityName.setText(cityName);
         lang_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
 
         spinner_lang.setAdapter(lang_adapter);
@@ -106,11 +113,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-        if (hasSavedWeather()) loadWeather();
 
     }
 
-    private void getLanguaagesFromRes() {
+    private void getLanguagesFromRes() {
         for (String s : getResources().getStringArray(R.array.lang_codes)) {
             languages_code.add(s);
         }
@@ -134,35 +140,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         cityName = EditTcityName.getText().toString();
         if (cbSaveCity.isChecked()) saveCity();
-        if (hasConnection(this)) {
 
-            URL = getURL();
-
-
-            WeatherParcer wp = (WeatherParcer) new WeatherParcer().execute(URL);
-            try {
-                weather = wp.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
-            if (weather.getCode() == 200) {
-                Intent intent = new Intent(this, ShowWeather.class);
-                intent.putExtra("weather", weather);
-                intent.putExtra("URL", URL);
-                startActivity(intent);
-            } else if (weather.getCode() == 404) {
-                alertError("city wasn't found");
-            } else {
-                alertError("something went wrong >.<" + weather.getCode());
-            }
-        } else {
-            alertError("no internet connection");
-        }
-
-
+        URL = getURL();
+        Intent intent = new Intent(this, ShowWeather.class);
+        intent.putExtra("URL", URL);
+        startActivity(intent);
     }
 
     private String getURL() {
@@ -224,37 +206,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ed.commit();
     }
 
-    void loadWeather() {
-        //   sPref = getPreferences(MODE_PRIVATE);
-        //   EditTcityName.setText(cityName);
 
-        if (hasConnection(this)) {
 
-            URL = getURL();
-            WeatherParcer wp = (WeatherParcer) new WeatherParcer().execute(URL);
-            try {
-                weather = wp.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
-            if (weather.getCode() == 200) {
-                Intent intent = new Intent(this, ShowWeather.class);
-                intent.putExtra("weather", weather);
-                intent.putExtra("URL", URL);
-                startActivity(intent);
-            } else if (weather.getCode() == 404) {
-                alertError("city wasn't found");
-            } else {
-                alertError("Woops, somthing went wrong >.<");
-            }
-        }
-
-        alertError("no internet connection");
-
-    }
 
     boolean hasSavedWeather() {
         // sPref = getPreferences(MODE_PRIVATE);

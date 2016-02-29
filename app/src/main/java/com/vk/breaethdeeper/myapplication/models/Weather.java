@@ -1,4 +1,4 @@
-package com.vk.breaethdeeper.myapplication;
+package com.vk.breaethdeeper.myapplication.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Погодка</string>
+    <string name="confirm">Готово!</string>
+    <string name="language">Мова</string>
+    <string name="please_wait">Секунду...</string>
+    <string name="pref_city">Місто</string>
+    <string name="pref_header_general"></string>
+    <string name="refreshing">Оновлюю</string>
+    <string name="remember_city">запам’ятати місто</string>
+    <string name="save">Зберегти</string>
+    <string name="settings">Налаштування</string>
+    <string name="title_activity_settings">Налаштування</string>
+    <string name="welcomeText">Найкраще місто в світі</string>
+    <string name="your_city">Файна погода зараз в </string>
+</resources>

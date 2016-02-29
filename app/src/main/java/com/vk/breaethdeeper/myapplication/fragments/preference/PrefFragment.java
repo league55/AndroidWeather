@@ -1,4 +1,4 @@
-package com.vk.breaethdeeper.myapplication.Fragments;
+package com.vk.breaethdeeper.myapplication.fragments.preference;
 
 import android.content.Context;
 import android.content.Intent;

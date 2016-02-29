@@ -34,5 +34,6 @@
     <string name="pref_city">City</string>
     <string name="language">Language</string>
     <string name="refreshing">Refreshing</string>
-    <string name="title_activity_preference">PreferenceActivity</string>
+
+
 </resources>

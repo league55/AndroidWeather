@@ -1,4 +1,4 @@
-package com.vk.breaethdeeper.myapplication;
+package com.vk.breaethdeeper.myapplication.dataBase;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.vk.breaethdeeper.myapplication.JsonLoadersParcers.CitiesParser;
-import com.vk.breaethdeeper.myapplication.JsonLoadersParcers.CountriesParcer;
+import com.vk.breaethdeeper.myapplication.jsonLoadersParcers.CitiesParser;
+import com.vk.breaethdeeper.myapplication.jsonLoadersParcers.CountriesParcer;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.vk.breaethdeeper.myapplication.JsonLoadersParcers;
+package com.vk.breaethdeeper.myapplication.jsonLoadersParcers;
 
 import android.content.ContentValues;
 import android.content.Context;

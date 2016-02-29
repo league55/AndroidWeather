@@ -1,9 +1,9 @@
-package com.vk.breaethdeeper.myapplication.JsonLoadersParcers;
+package com.vk.breaethdeeper.myapplication.jsonLoadersParcers;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.vk.breaethdeeper.myapplication.Weather;
+import com.vk.breaethdeeper.myapplication.models.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,16 +97,19 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
         try {
 
             JSONObject response = new JSONObject(result);
-            JSONArray weatherArray = (JSONArray) response.get("weather");
-            JSONObject ob = weatherArray.getJSONObject(0);
-            JSONObject mainPart = (JSONObject) response.get("main");
-            JSONObject wind = (JSONObject) response.get("wind");
 
             int code = response.getInt("cod");
 
             if (code != 200) {
                 return new Weather(code);
-            } else {
+            }
+
+
+            JSONArray weatherArray = (JSONArray) response.get("weather");
+            JSONObject ob = weatherArray.getJSONObject(0);
+            JSONObject mainPart = (JSONObject) response.get("main");
+            JSONObject wind = (JSONObject) response.get("wind");
+
 
                 String id = ob.getString("id");
                 String main = ob.getString("main");
@@ -119,7 +122,7 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
                 String icon = ob.getString("icon");
 
                 weather = new Weather(id, main, description, temp, pressure, humidity, windSpeed, cityName, icon, code);
-            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

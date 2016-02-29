@@ -12,11 +12,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.vk.breaethdeeper.myapplication.JsonLoadersParcers.WeatherParcer;
 import com.vk.breaethdeeper.myapplication.R;
-import com.vk.breaethdeeper.myapplication.Weather;
-
-import java.util.concurrent.ExecutionException;
 
 public class AppPreferenceActivity extends PreferenceActivity {
 
@@ -39,6 +35,9 @@ public class AppPreferenceActivity extends PreferenceActivity {
     public static class PrefFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
         SharedPreferences sharedPref;
 
+        private String oldCity;
+        private String oldLang;
+
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
@@ -49,8 +48,9 @@ public class AppPreferenceActivity extends PreferenceActivity {
                 context = getActivity();
                 PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
 
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-
+                sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+                oldCity = sharedPref.getString("SAVED_CITY", "");
+                oldLang = sharedPref.getString("SAVED_LANG", "en");
             }
 
 
@@ -82,38 +82,16 @@ public class AppPreferenceActivity extends PreferenceActivity {
             Log.i("PREF", "Click" + preference.getTitle());
             switch (preference.getKey()) {
                 case "SAVE_PREF":
-                    foo();
-                  /*  Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);*/
+                    String URL = getURL();
+                    Intent intent = new Intent(getActivity(), ShowWeather.class);
+                    intent.putExtra("URL", URL);
+                    startActivity(intent);
                     break;
             }
 
             return false;
         }
 
-        private void foo() {
-            Weather weather = new Weather();
-            String URL = getURL();
-            WeatherParcer wp = (WeatherParcer) new WeatherParcer().execute(URL);
-            try {
-                weather = wp.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
-            if (weather.getCode() == 200) {
-                Intent intent = new Intent(getActivity(), ShowWeather.class);
-                intent.putExtra("weather", weather);
-                intent.putExtra("URL", URL);
-                startActivity(intent);
-            } else if (weather.getCode() == 404) {
-                // alertError("city wasn't found");
-            } else {
-                // alertError("something went wrong >.<" + weather.getCode());
-            }
-        }
 
         private String getURL() {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());

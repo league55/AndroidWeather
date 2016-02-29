@@ -13,17 +13,18 @@
         android:textColor="#fff"
         android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="35dp"
+    <ImageButton
+        android:id="@+id/homeButton"
+        android:layout_width="60dp"
         android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
-        android:src="@mipmap/ic_launcher" />
+        android:background="@null"
+        android:src="@mipmap/icon_64x64" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/updateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
