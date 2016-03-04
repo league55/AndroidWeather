@@ -3,7 +3,6 @@ package com.vk.breaethdeeper.myapplication.jsonLoadersParcers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,9 +44,9 @@ public class CountriesParcer {
 
     }
 
-    private ArrayMap<String, String> loadCountriesJSONFromAsset(Context c, String assetName) {
+    public HashMap<String, String> loadCountriesJSONFromAsset(Context c, String assetName) {
         String json = null;
-        ArrayMap<String, String> countriesName = null;
+        HashMap<String, String> countriesName = null;
         try {
             InputStream is = c.getAssets().open(assetName);
             int size = is.available();
@@ -67,11 +67,11 @@ public class CountriesParcer {
             JSONObject response = new JSONObject(result);
             JSONArray countriesArray = (JSONArray) response.get("countries");
             JSONObject w = countriesArray.getJSONObject(0);
-            countriesName = new ArrayMap<>(countriesArray.length());
+            countriesName = new HashMap();
 
             for (int i = 0; i < countriesArray.length() - 1; i++) {
                 JSONObject country = countriesArray.getJSONObject(i);
-                countriesName.put(country.getString("code"), country.getString("name"));
+                countriesName.put(country.getString("name"), country.getString("code"));
             }
 
 
@@ -80,7 +80,10 @@ public class CountriesParcer {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
         return countriesName;
     }
+
 
 }

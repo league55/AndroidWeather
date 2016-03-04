@@ -5,12 +5,14 @@
     <string name="language">Мова</string>
     <string name="please_wait">Секунду...</string>
     <string name="pref_city">Місто</string>
-    <string name="pref_header_general"></string>
+    <string name="pref_header_general">налаштування</string>
     <string name="refreshing">Оновлюю</string>
     <string name="remember_city">запам’ятати місто</string>
     <string name="save">Зберегти</string>
     <string name="settings">Налаштування</string>
     <string name="title_activity_settings">Налаштування</string>
-    <string name="welcomeText">Найкраще місто в світі</string>
-    <string name="your_city">Файна погода зараз в </string>
+    <string name="welcomeText">Найкраще місто в світі то</string>
+    <string name="your_city">Файна погода зараз у місті</string>
+    <string name="current">За вікном</string>
+    <string name="forecast">5 діб</string>
 </resources>

@@ -27,9 +27,9 @@
         android:id="@+id/confirmCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cbSaveCity"
+        android:layout_below="@+id/spinner_lang"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="52dp"
         android:background="#ffffff"
         android:text="@string/confirm" />
 
@@ -46,7 +46,7 @@
         android:id="@+id/cbSaveCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/city"
+        android:layout_below="@+id/spinner_lang"
         android:layout_centerHorizontal="true"
         android:text="@string/remember_city" />
 
@@ -54,9 +54,16 @@
         android:id="@+id/spinner_lang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cbSaveCity"
+        android:layout_below="@+id/spinner_country"
         android:layout_centerHorizontal="true"
         android:spinnerMode="dropdown"
         android:textAlignment="center" />
+
+    <Spinner
+        android:id="@+id/spinner_country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/city"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

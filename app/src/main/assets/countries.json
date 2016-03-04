@@ -6,53 +6,16 @@
       "code": "AR"
     },
     {
-      "name": "Armenia",
-      "code": "AM"
-    },
-    {
       "name": "Australia",
       "code": "AU"
     },
-    {
-      "name": "Austria",
-      "code": "AT"
-    },
-    {
-      "name": "Azerbaijan",
-      "code": "AZ"
-    },
-    {
-      "name": "Bahamas",
-      "code": "BS"
-    },
-    {
-      "name": "Bahrain",
-      "code": "BH"
-    },
-    {
-      "name": "Bangladesh",
-      "code": "BD"
-    },
-
     {
       "name": "Belarus",
       "code": "BY"
     },
     {
-      "name": "Belgium",
-      "code": "BE"
-    },
-    {
-      "name": "Bosnia and Herzegovina",
-      "code": "BA"
-    },
-    {
       "name": "Brazil",
       "code": "BR"
-    },
-    {
-      "name": "British Indian Ocean Territory",
-      "code": "IO"
     },
     {
       "name": "Bulgaria",
@@ -63,48 +26,12 @@
       "code": "CA"
     },
     {
-      "name": "Cape Verde",
-      "code": "CV"
-    },
-    {
-      "name": "Cayman Islands",
-      "code": "KY"
-    },
-    {
-      "name": "Central African Republic",
-      "code": "CF"
-    },
-    {
-      "name": "Chile",
-      "code": "CL"
-    },
-    {
-      "name": "China",
-      "code": "CN"
-    },
-    {
-      "name": "Colombia",
-      "code": "CO"
-    },
-    {
-      "name": "Cook Islands",
-      "code": "CK"
-    },
-    {
       "name": "Czech Republic",
       "code": "CZ"
     },
     {
       "name": "Denmark",
       "code": "DK"
-    },
-    {
-      "name": "Djibouti",
-      "code": "DJ"
-    },
-    {
-      "name": "Dominica",
-      "code": "DM"
     },
     {
       "name": "Finland",
@@ -115,127 +42,7 @@
       "code": "FR"
     },
     {
-      "name": "Germany",
-      "code": "DE"
-    },
-    {
-      "name": "Ghana",
-      "code": "GH"
-    },
-    {
-      "name": "Greece",
-      "code": "GR"
-    },
-    {
-      "name": "Greenland",
-      "code": "GL"
-    },
-    {
-      "name": "Grenada",
-      "code": "GD"
-    },
-    {
-      "name": "Italy",
-      "code": "IT"
-    },
-    {
-      "name": "Jamaica",
-      "code": "JM"
-    },
-    {
-      "name": "Japan",
-      "code": "JP"
-    },
-    {
-      "name": "Jersey",
-      "code": "JE"
-    },
-    {
-      "name": "Jordan",
-      "code": "JO"
-    },
-    {
-      "name": "Kazakhstan",
-      "code": "KZ"
-    },
-    {
-      "name": "Kenya",
-      "code": "KE"
-    },
-    {
-      "name": "Latvia",
-      "code": "LV"
-    },
-    {
-      "name": "Lebanon",
-      "code": "LB"
-    },
-    {
-      "name": "Lesotho",
-      "code": "LS"
-    },
-    {
-      "name": "Liberia",
-      "code": "LR"
-    },
-    {
-      "name": "Mexico",
-      "code": "MX"
-    },
-    {
-      "name": "Micronesia, Federated States of",
-      "code": "FM"
-    },
-    {
-      "name": "Moldova, Republic of",
-      "code": "MD"
-    },
-    {
-      "name": "Monaco",
-      "code": "MC"
-    },
-    {
-      "name": "Mongolia",
-      "code": "MN"
-    },
-    {
-      "name": "Montenegro",
-      "code": "ME"
-    },
-    {
-      "name": "Montserrat",
-      "code": "MS"
-    },
-    {
-      "name": "Netherlands",
-      "code": "NL"
-    },
-    {
-      "name": "Netherlands Antilles",
-      "code": "AN"
-    },
-    {
-      "name": "Norway",
-      "code": "NO"
-    },
-    {
-      "name": "Oman",
-      "code": "OM"
-    },
-    {
-      "name": "Poland",
-      "code": "PL"
-    },
-    {
-      "name": "Portugal",
-      "code": "PT"
-    },
-    {
-      "name": "Romania",
-      "code": "RO"
-    },
-    {
-      "name": "Russian Federation",
+      "name": "Россия",
       "code": "RU"
     },
     {
@@ -251,18 +58,6 @@
       "code": "SI"
     },
     {
-      "name": "Solomon Islands",
-      "code": "SB"
-    },
-    {
-      "name": "Somalia",
-      "code": "SO"
-    },
-    {
-      "name": "South Africa",
-      "code": "ZA"
-    },
-    {
       "name": "Spain",
       "code": "ES"
     },
@@ -275,30 +70,6 @@
       "code": "SD"
     },
     {
-      "name": "Suriname",
-      "code": "SR"
-    },
-    {
-      "name": "Svalbard and Jan Mayen",
-      "code": "SJ"
-    },
-    {
-      "name": "Swaziland",
-      "code": "SZ"
-    },
-    {
-      "name": "Sweden",
-      "code": "SE"
-    },
-    {
-      "name": "Switzerland",
-      "code": "CH"
-    },
-    {
-      "name": "Tunisia",
-      "code": "TN"
-    },
-    {
       "name": "Turkey",
       "code": "TR"
     },
@@ -307,24 +78,8 @@
       "code": "TM"
     },
     {
-      "name": "Turks and Caicos Islands",
-      "code": "TC"
-    },
-    {
-      "name": "Tuvalu",
-      "code": "TV"
-    },
-    {
-      "name": "Uganda",
-      "code": "UG"
-    },
-    {
-      "name": "Ukraine",
+      "name": "Україна",
       "code": "UA"
-    },
-    {
-      "name": "United Arab Emirates",
-      "code": "AE"
     },
     {
       "name": "United Kingdom",
@@ -333,38 +88,6 @@
     {
       "name": "United States",
       "code": "US"
-    },
-    {
-      "name": "Viet Nam",
-      "code": "VN"
-    },
-    {
-      "name": "Virgin Islands, British",
-      "code": "VG"
-    },
-    {
-      "name": "Virgin Islands, U.S.",
-      "code": "VI"
-    },
-    {
-      "name": "Wallis and Futuna",
-      "code": "WF"
-    },
-    {
-      "name": "Western Sahara",
-      "code": "EH"
-    },
-    {
-      "name": "Yemen",
-      "code": "YE"
-    },
-    {
-      "name": "Zambia",
-      "code": "ZM"
-    },
-    {
-      "name": "Zimbabwe",
-      "code": "ZW"
     }
   ]
 }

@@ -1,10 +1,13 @@
 package com.vk.breaethdeeper.myapplication.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,24 +16,26 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vk.breaethdeeper.myapplication.App;
 import com.vk.breaethdeeper.myapplication.R;
+import com.vk.breaethdeeper.myapplication.fragments.weather.CurrentWeathFrag;
+import com.vk.breaethdeeper.myapplication.fragments.weather.ForecastFrag;
 import com.vk.breaethdeeper.myapplication.jsonLoadersParcers.WeatherHandler;
 import com.vk.breaethdeeper.myapplication.jsonLoadersParcers.WeatherParcer;
+import com.vk.breaethdeeper.myapplication.models.Forecast;
 import com.vk.breaethdeeper.myapplication.models.Weather;
 
 public class ShowWeather extends AppCompatActivity implements View.OnClickListener {
-    Weather weather;
-    private String URL;
+    static Forecast forecast;
+    static Weather weather;
+    FragmentPagerAdapter adapterViewPager;
+    private String[] URL;
     private String city = "";
-    private TextView cityTV;
-    private TextView weatherMainTV;
-    private TextView weatherDescrTV;
-    private TextView weatherTempTV;
-    private TextView windSpeedTV;
-    private TextView humidityTV;
     private WeatherHandler weatherHandler;
     private WeatherParcer weatherParcer;
-    private ProgressDialog pDialog;
+
+    private CurrentWeathFrag currentWeathFrag;
+    private ForecastFrag forecastFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,30 +45,35 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
         weatherHandler = new WeatherHandler(this);
         weatherParcer = new WeatherParcer();
 
-        URL = getIntent().getStringExtra("URL");
-
-        cityTV = (TextView) findViewById(R.id.tVCity);
-        weatherMainTV = (TextView) findViewById(R.id.tVmain);
-        weatherDescrTV = (TextView) findViewById(R.id.tVdescription);
-        weatherTempTV = (TextView) findViewById(R.id.tVtemp);
-        windSpeedTV = (TextView) findViewById(R.id.tVwindSpeed);
-        humidityTV = (TextView) findViewById(R.id.tVhuimdity);
+        URL = getIntent().getStringArrayExtra("URL");
+        city = getIntent().getStringExtra(MainActivity.SAVED_CITY);
 
 
-        weather = weatherHandler.updateWeather(URL, weatherParcer, weather);
-        updateUI(weather);
+        weather = weatherHandler.updateWeather(URL, weather, forecast);
+        weather.setCityName(city);
+        forecast = weatherHandler.forecast;
+
+        ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
+        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(adapterViewPager);
+
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        URL = getIntent().getStringExtra("URL");
-        // weather = weatherHandler.updateWeather(URL, weatherParcer, weather);
-        //  updateUI(weather);
+        URL = getIntent().getStringArrayExtra("URL");
     }
 
     private void setCustomActionBar() {
-        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+        ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
@@ -88,7 +98,9 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
             case R.id.updateButton:
                 Toast.makeText(getApplicationContext(), getString(R.string.refreshing),
                         Toast.LENGTH_LONG).show();
-
+                weatherHandler.updateWeather(URL, weather, forecast);
+                if (currentWeathFrag != null) currentWeathFrag.updateUI(weather);
+                if (forecastFrag != null) forecastFrag.updateUI(forecast);
                 break;
             case R.id.homeButton:
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -117,7 +129,7 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == 1) {
-            //startActivity(new Intent(this, SettingsActivity.class));
+
             Intent i = new Intent(this, AppPreferenceActivity.class);
             startActivity(i);
             return true;
@@ -127,25 +139,46 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
     }
 
 
-    private void updateUI(Weather weather) {
+    public static class MyPagerAdapter extends FragmentPagerAdapter {
+        private static int NUM_ITEMS = 2;
 
-        Log.i("SHOW_W", weather.toString());
 
-        pDialog = new ProgressDialog(ShowWeather.this);
-        pDialog.setMessage(getString(R.string.please_wait));
-        pDialog.setCancelable(false);
-        pDialog.show();
+        public MyPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
 
-        cityTV.setText(getString(R.string.your_city) + " " + weather.getCityName());
-        weatherDescrTV.setText(weather.getDescription());
-        float temp = Float.parseFloat(weather.getTemp());
-        temp = Math.round(temp);
-        weatherTempTV.setText(temp + "C");
-        windSpeedTV.setText(weather.getWindSpeed() + "m/s");
-        humidityTV.setText(weather.getHumidity() + "%");
 
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+
+        @Override
+        public Fragment getItem(int position) {
+
+            switch (position) {
+                case 0:
+                    return CurrentWeathFrag.newInstance(ShowWeather.weather);
+
+                case 1:
+                    return ForecastFrag.newInstance(ShowWeather.forecast.getFiveDayWeatherStr());
+
+            }
+            return null;
+        }
+
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+
+            String[] titles = new String[]{App.getContext().getString(R.string.current), App.getContext().getString(R.string.forecast)};
+            return titles[position];
+        }
+
     }
+
 }
+
+
 

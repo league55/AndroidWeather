@@ -3,6 +3,7 @@ package com.vk.breaethdeeper.myapplication.jsonLoadersParcers;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.vk.breaethdeeper.myapplication.models.Forecast;
 import com.vk.breaethdeeper.myapplication.models.Weather;
 
 import org.json.JSONArray;
@@ -21,29 +22,26 @@ import java.net.URL;
  * Created by mixmax on 19.02.16.
  * gets current weather from web
  */
-public class WeatherParcer extends AsyncTask<String, Void, Weather> {
+public class ForecastParcer extends AsyncTask<String, Void, Forecast> {
     private int result = 0;
 
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        // Showing progress dialog
-            /*pDialog = new ProgressDialog(ShowWeather.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();*/
+
     }
 
     @Override
-    protected Weather doInBackground(String... urls) {
+    protected Forecast doInBackground(String... urls) {
+        Forecast forecast = null;
         Weather weather = null;
         HttpURLConnection urlConnection = null;
         BufferedReader br = null;
         String string = "";
 
         try {
-            java.net.URL url = new URL(urls[0]);
+            URL url = new URL(urls[0]);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoInput(true);
@@ -56,7 +54,7 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
             if (statusCode == 200) {
                 inputStream = new BufferedInputStream(urlConnection.getInputStream());
                 String response = convertInputStreamToString(inputStream);
-                weather = parseResult(response);
+                forecast = parseResult(response);
 
                 result = 1; // Successful
             } else {
@@ -73,7 +71,7 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
                 e.printStackTrace();
             }
         }
-        return weather;
+        return forecast;
     }
 
 
@@ -92,8 +90,9 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
         return result;
     }
 
-    private Weather parseResult(String result) {
+    private Forecast parseResult(String result) {
         Weather weather = null;
+        Forecast forecast = new Forecast();
         try {
 
             JSONObject response = new JSONObject(result);
@@ -101,14 +100,20 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
             int code = response.getInt("cod");
 
             if (code != 200) {
-                return new Weather(code);
+                return new Forecast(code);
             }
 
+            JSONArray list = (JSONArray) response.get("list");
 
-            JSONArray weatherArray = (JSONArray) response.get("weather");
-            JSONObject ob = weatherArray.getJSONObject(0);
-            JSONObject mainPart = (JSONObject) response.get("main");
-            JSONObject wind = (JSONObject) response.get("wind");
+            for (int i = 0; i < list.length() - 1; i++) {
+
+                JSONObject weatherOb = list.getJSONObject(i);
+                JSONArray weatherArray = (JSONArray) weatherOb.get("weather");
+                JSONObject ob = weatherArray.getJSONObject(0);
+
+
+                JSONObject mainPart = (JSONObject) weatherOb.get("main");
+                JSONObject wind = (JSONObject) weatherOb.get("wind");
 
 
                 String id = ob.getString("id");
@@ -118,23 +123,28 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
                 String pressure = mainPart.getString("pressure");
                 String humidity = mainPart.getString("humidity");
                 String windSpeed = wind.getString("speed");
-            int windDeg = wind.getInt("deg");
-            String cityName = response.getString("name");
-            String date = response.getString("dt");
-            String icon = ob.getString("icon");
+                int windDeg = wind.getInt("deg");
+                String cityName = response.getJSONObject("city").getString("name");
+                String date = (weatherOb.getString("dt"));
+                String icon = ob.getString("icon");
 
-            weather = new Weather(id, main, description, temp, pressure, humidity, windSpeed, windDeg, cityName, icon, date, code);
+                weather = new Weather(id, main, description, temp, pressure, humidity, windSpeed, windDeg, cityName, icon, date, code);
+
+                forecast.addWeather(weather);
+
+            }
+            return forecast;
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return weather;
+        return forecast;
     }
 
     @Override
-    protected void onPostExecute(Weather w) {
-        super.onPostExecute(w);
+    protected void onPostExecute(Forecast f) {
+        super.onPostExecute(f);
 
     }
 }

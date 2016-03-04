@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
+import com.vk.breaethdeeper.myapplication.models.Forecast;
 import com.vk.breaethdeeper.myapplication.models.Weather;
 
 import java.io.IOException;
@@ -14,20 +15,25 @@ import java.util.concurrent.ExecutionException;
  */
 public class WeatherHandler {
 
+    public Forecast forecast;
     private Context context;
-
     public WeatherHandler(Context context) {
         this.context = context;
     }
 
-    public Weather updateWeather(String URL, WeatherParcer wp, Weather oldWeather) {
+    public Weather updateWeather(String[] URL, Weather oldWeather, Forecast oldForcast) {
 
         Weather weather = oldWeather;
-
+        forecast = oldForcast;
+        WeatherParcer wp = new WeatherParcer();
+        ForecastParcer fp = new ForecastParcer();
         if (hasConnection(context)) {
-            wp.execute(URL);
+            wp.execute(URL[0]);
+            fp.execute(URL[1]);
             try {
                 weather = wp.get();
+                forecast = fp.get();
+                Log.i("WH", forecast.toString());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -75,4 +81,6 @@ public class WeatherHandler {
         return false;
 
     }
+
+
 }

@@ -1,26 +1,16 @@
 package com.vk.breaethdeeper.myapplication.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by mixmax on 17.02.16.
  */
-public class Weather implements Parcelable {
+public class Weather {
 
 
-    public static final Parcelable.Creator<Weather> CREATOR = new Parcelable.Creator<Weather>() {
-        // распаковываем объект из Parcel
-        public Weather createFromParcel(Parcel in) {
-            Log.d("Weather", "createFromParcel");
-            return new Weather(in);
-        }
 
-        public Weather[] newArray(int size) {
-            return new Weather[size];
-        }
-    };
     public String main;
     private String id;
     private String description;
@@ -28,11 +18,16 @@ public class Weather implements Parcelable {
     private String pressure;
     private String humidity;
     private String windSpeed;
+    private int windDeg;
     private String cityName;
     private String icon;
+    private String date;
     private int code;
+    private Date dateF;
 
-    public Weather(String id, String main, String description, String temp, String pressure, String humidity, String windSpeed, String cityName, String icon, int code) {
+    private String dateTime;
+
+    public Weather(String id, String main, String description, String temp, String pressure, String humidity, String windSpeed, int windDeg, String cityName, String icon, String date, int code) {
         this.id = id;
         this.main = main;
         this.description = description;
@@ -40,26 +35,13 @@ public class Weather implements Parcelable {
         this.pressure = pressure;
         this.humidity = humidity;
         this.windSpeed = windSpeed;
+        this.windDeg = windDeg;
         this.cityName = cityName;
         this.icon = icon;
+        setDate(date);
         this.code = code;
     }
 
-    // конструктор, считывающий данные из Parcel
-    private Weather(Parcel parcel) {
-        Log.d("Weather", "Weather(Parcel parcel)");
-
-        this.id = parcel.readString();
-        this.main = parcel.readString();
-        this.description = parcel.readString();
-        this.temp = parcel.readString();
-        this.pressure = parcel.readString();
-        this.humidity = parcel.readString();
-        this.windSpeed = parcel.readString();
-        this.cityName = parcel.readString();
-        this.icon = parcel.readString();
-        this.code = parcel.readInt();
-    }
 
 
     public Weather(int code) {
@@ -141,6 +123,25 @@ public class Weather implements Parcelable {
         this.icon = icon;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.dateF = new Date(Long.parseLong(date) * 1000);
+
+        Locale locale = Locale.getDefault();
+        SimpleDateFormat df = new SimpleDateFormat("E d MMM HH:mm", locale);
+        this.dateTime = df.format(dateF);
+
+        df = new SimpleDateFormat("E d MMM", locale);
+        this.date = df.format(dateF);
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
     public int getCode() {
         return code;
     }
@@ -148,6 +149,7 @@ public class Weather implements Parcelable {
     public void setCode(int code) {
         this.code = code;
     }
+
 
     @Override
     public String toString() {
@@ -202,25 +204,7 @@ public class Weather implements Parcelable {
         return result;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    // упаковываем объект в Parcel
-    public void writeToParcel(Parcel parcel, int flags) {
-        Log.d("Weather", "writeToParcel");
-        parcel.writeString(id);
-        parcel.writeString(main);
-        parcel.writeString(description);
-        parcel.writeString(temp);
-        parcel.writeString(pressure);
-        parcel.writeString(humidity);
-        parcel.writeString(windSpeed);
-        parcel.writeString(cityName);
-        parcel.writeString(icon);
-        parcel.writeInt(code);
-    }
 
 
 }
