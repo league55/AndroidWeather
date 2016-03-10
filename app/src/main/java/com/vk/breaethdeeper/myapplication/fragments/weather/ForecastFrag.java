@@ -3,17 +3,21 @@ package com.vk.breaethdeeper.myapplication.fragments.weather;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.vk.breaethdeeper.myapplication.App;
 import com.vk.breaethdeeper.myapplication.R;
+import com.vk.breaethdeeper.myapplication.adapter.ForecastAdapter;
 import com.vk.breaethdeeper.myapplication.models.Forecast;
+import com.vk.breaethdeeper.myapplication.models.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +30,13 @@ public class ForecastFrag extends Fragment {
     Activity activity;
     ListView list;
     Context context;
+    ForecastAdapter forecastAdapter;
+    ArrayList<Weather> fiveWeathers;
 
-    ArrayList<String> titlesList;
-
-    public static ForecastFrag newInstance(ArrayList<String> list) {
+    public static ForecastFrag newInstance(ArrayList<Weather> list) {
         ForecastFrag forecastFrag = new ForecastFrag();
         Bundle args = new Bundle();
-        args.putStringArrayList("titlesList", list);
+        args.putParcelableArrayList("FiveWeathers", list);
         forecastFrag.setArguments(args);
         return forecastFrag;
     }
@@ -40,8 +44,16 @@ public class ForecastFrag extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = App.getContext();
+        fiveWeathers = new ArrayList<Weather>();
 
-        titlesList = getArguments().getStringArrayList("titlesList");
+        for (Parcelable p : getArguments().getParcelableArrayList("FiveWeathers")) {
+
+            fiveWeathers.add((Weather) p);
+        }
+
+
+        forecastAdapter = new ForecastAdapter(context, fiveWeathers);
     }
 
     @Nullable
@@ -51,9 +63,16 @@ public class ForecastFrag extends Fragment {
         View view = inflater.inflate(R.layout.forecast_frag, container, false);
         context = App.getContext();
         this.list = (ListView) view.findViewById(R.id.listView);
-        ArrayAdapter<String> for_adapter = new ArrayAdapter<String>(context, R.layout.rowlayout, R.id.label, titlesList);
-        list.setAdapter(for_adapter);
+        //  ArrayAdapter<String> for_adapter = new ArrayAdapter<String>(context, R.layout.rowlayout, R.id.label_main_info, f);
+        list.setAdapter(forecastAdapter);
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Intent intent = new Intent(App.getContext(), MainActivity.class);
+                //startActivity(intent);
+            }
+        });
         return view;
     }
 
@@ -66,7 +85,7 @@ public class ForecastFrag extends Fragment {
 
     public boolean updateUI(Forecast forcast) {
         List<String> main = forcast.getFiveDayWeatherStr();
-        list.setAdapter(new ArrayAdapter<String>(context, R.layout.rowlayout, R.id.label, main));
+        list.setAdapter(new ArrayAdapter<String>(context, R.layout.rowlayout, R.id.label_main_info, main));
         return true;
     }
 

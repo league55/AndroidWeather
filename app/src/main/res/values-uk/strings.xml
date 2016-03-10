@@ -15,4 +15,6 @@
     <string name="your_city">Файна погода зараз у місті</string>
     <string name="current">За вікном</string>
     <string name="forecast">5 діб</string>
+    <string name="select_country">оберіть країну</string>
+    <string name="pls_check_connection">Будь ласка, перевірте наявність інтернету</string>
 </resources>

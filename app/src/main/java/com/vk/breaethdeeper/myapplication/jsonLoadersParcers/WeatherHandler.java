@@ -2,8 +2,12 @@ package com.vk.breaethdeeper.myapplication.jsonLoadersParcers;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.vk.breaethdeeper.myapplication.App;
+import com.vk.breaethdeeper.myapplication.activities.MainActivity;
 import com.vk.breaethdeeper.myapplication.models.Forecast;
 import com.vk.breaethdeeper.myapplication.models.Weather;
 
@@ -17,21 +21,24 @@ public class WeatherHandler {
 
     public Forecast forecast;
     private Context context;
+    private SharedPreferences sPref;
     public WeatherHandler(Context context) {
         this.context = context;
     }
 
-    public Weather updateWeather(String[] URL, Weather oldWeather, Forecast oldForcast) {
+    public Weather updateWeather(Weather oldWeather, Forecast oldForcast) {
+        sPref = PreferenceManager.getDefaultSharedPreferences(App.getContext());
 
         Weather weather = oldWeather;
         forecast = oldForcast;
         WeatherParcer wp = new WeatherParcer();
         ForecastParcer fp = new ForecastParcer();
         if (hasConnection(context)) {
-            wp.execute(URL[0]);
-            fp.execute(URL[1]);
+            wp.execute(sPref.getString(MainActivity.URLw, ""));
+            fp.execute(sPref.getString(MainActivity.URLf, ""));
             try {
                 weather = wp.get();
+                weather.setCityName(oldWeather.getCityName());
                 forecast = fp.get();
                 Log.i("WH", forecast.toString());
             } catch (InterruptedException e) {

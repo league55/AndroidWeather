@@ -3,7 +3,7 @@ package com.vk.breaethdeeper.myapplication.fragments.weather;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,8 +20,7 @@ import com.vk.breaethdeeper.myapplication.models.Weather;
  * Created by mixmax on 29.02.16.
  */
 public class CurrentWeathFrag extends Fragment {
-    Weather weather;
-    SharedPreferences sPref;
+
     String temp = "";
     String description;
     String humidity;
@@ -42,7 +41,7 @@ public class CurrentWeathFrag extends Fragment {
         CurrentWeathFrag currentWeathFrag = new CurrentWeathFrag();
         Bundle args = new Bundle();
 
-        //  args.putString("someTitle", title);
+
         args.putString("city", w.getCityName());
         args.putString("description", w.getDescription());
         args.putString("temp", w.getTemp());
@@ -76,11 +75,14 @@ public class CurrentWeathFrag extends Fragment {
         windSpeedTV = (TextView) view.findViewById(R.id.tVwindSpeed);
         humidityTV = (TextView) view.findViewById(R.id.tVhuimdity);
 
+        view.setBackgroundResource(R.drawable.rain2_animation);
+        AnimationDrawable frameAnimation = (AnimationDrawable) view.getBackground();
+        frameAnimation.start();
+
+
         cityTV.setText(city);
         weatherDescrTV.setText(description);
-        float tempF = Float.parseFloat(temp);
-        tempF = Math.round(tempF);
-        weatherTempTV.setText(tempF + "C");
+        weatherTempTV.setText(temp + "C");
         windSpeedTV.setText(windSpeed + "m/s");
         humidityTV.setText(humidity + "%");
 

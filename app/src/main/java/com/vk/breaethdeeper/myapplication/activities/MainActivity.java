@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vk.breaethdeeper.myapplication.R;
 import com.vk.breaethdeeper.myapplication.jsonLoadersParcers.CountriesParcer;
@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public static final String SAVED_CITY = "SAVED_CITY";
+    public static final String URLw = "URLw";
+    public static final String URLf = "URLf";
     final String SAVED_LANG = "SAVED_LANG";
     final String SAVED_COUNTRY_CODE = "SAVED_COUNTRY_CODE";
     final String SAVED_COUNTRY = "SAVED_COUNTRY";
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Spinner spinner_lang;
     private Spinner spinner_country;
     private String lang = "en";
+
     private String cityName;
     private String countryName;
     private String countryCode;
@@ -62,15 +65,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
         getLanguagesFromRes();
-        sPref = getPreferences(MODE_PRIVATE);
+        if (hasConnection(this)) {
+            if (!getIntent().getBooleanExtra("isForsed", false) && hasSavedWeather()) {
+                Intent intent = new Intent(this, ShowWeather.class);
+                getURL();
+                startActivity(intent);
+            }
+        }
+
 
 
         if (sPref.contains(SAVED_LANG)) {
@@ -81,18 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (sPref.contains(SAVED_COUNTRY_CODE))
             countryCode = sPref.getString(SAVED_COUNTRY_CODE, "UA");
 
-        if (!getIntent().getBooleanExtra("isForsed", false) && hasSavedWeather()) {
-            Intent intent = new Intent(this, ShowWeather.class);
-            // intent.putExtra("weather", weather);
-            URL = getURL();
-            intent.putExtra("URL", URL);
-            intent.putExtra(SAVED_CITY, cityName);
-
-            startActivity(intent);
-        }
 
         countriesMap = new CountriesParcer().loadCountriesJSONFromAsset(this, "countries.json");
         final ArrayList<String> countries = new ArrayList<String>(countriesMap.keySet());
+        countries.add(0, getResources().getString(R.string.select_country));
 
         cbSaveCity = (CheckBox) findViewById(R.id.cbSaveCity);
         welcome = (TextView) findViewById(R.id.tfWelcome);
@@ -104,12 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         confirm.setOnClickListener(this);
 
         if (cityName != null) EditTcityName.setText(cityName);
+
         lang_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
-        countries_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, countries);
-
         spinner_lang.setAdapter(lang_adapter);
-        spinner_country.setAdapter(countries_adapter);
-
         spinner_lang.setSelection(lang_adapter.getPosition(languages.get(languages_code.indexOf(sPref.getString(SAVED_LANG, "en")))));
         spinner_lang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -126,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
+        countries_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, countries);
+        spinner_country.setAdapter(countries_adapter);
         spinner_country.setSelection(countries_adapter.getPosition(sPref.getString(SAVED_COUNTRY, "")));
         spinner_country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -147,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (String s : getResources().getStringArray(R.array.lang_codes)) {
             languages_code.add(s);
         }
-
         for (String s : getResources().getStringArray(R.array.languages)) {
             languages.add(s);
         }
@@ -156,38 +153,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestart() {
         super.onRestart();
-
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
         if (cityName != null) EditTcityName.setText(cityName);
         if (lang != null)
             spinner_lang.setSelection(lang_adapter.getPosition(languages.get(languages_code.indexOf(sPref.getString(SAVED_LANG, "en")))));
-
+        if (countryName != null)
+            spinner_country.setSelection(countries_adapter.getPosition(sPref.getString(SAVED_COUNTRY, "")));
     }
 
     @Override
     public void onClick(View v) {
-        cityName = EditTcityName.getText().toString();
-        saveCity(cbSaveCity.isChecked());
-        setLang(lang);
+        if (!hasConnection(this)) {
+            Toast.makeText(this, getResources().getString(R.string.pls_check_connection), Toast.LENGTH_SHORT).show();
+        } else {
+            cityName = EditTcityName.getText().toString();
 
-        URL = getURL();
-        Intent intent = new Intent(this, ShowWeather.class);
-        intent.putExtra("URL", URL);
-        intent.putExtra(SAVED_CITY, cityName);
+            saveCity(cbSaveCity.isChecked());
+            setLang(lang);
 
-        startActivity(intent);
+            getURL();
+            Intent intent = new Intent(this, ShowWeather.class);
+
+            startActivity(intent);
+        }
     }
 
     private String[] getURL() {
         String[] URL = new String[2];
-        String cityNameLat = cityName;
-
+        String cityName = sPref.getString(SAVED_CITY, null);
+        String lang = sPref.getString(SAVED_LANG, "en");
+        String countryCode = sPref.getString(SAVED_COUNTRY_CODE, getResources().getString(R.string.select_country));
+        String countryName = sPref.getString(SAVED_COUNTRY, "");
+        String cityNameEncoded = cityName;
         try {
-            cityNameLat = URLEncoder.encode(cityName, "UTF-8");
+            cityNameEncoded = URLEncoder.encode(cityName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        URL[0] = "http://api.openweathermap.org/data/2.5/weather?q=" + cityNameLat + "," + countryCode + "&lang=" + lang + "&units=metric&&APPID=1b1a14fc9f3424c03af8a8da7a21c62d";
-        URL[1] = "http://api.openweathermap.org/data/2.5/forecast?q=" + cityNameLat + "," + countryCode + "&lang=" + lang + "&units=metric&&APPID=1b1a14fc9f3424c03af8a8da7a21c62d";
+        if (countryName.equals(getResources().getString(R.string.select_country))) {
+            URL[0] = "http://api.openweathermap.org/data/2.5/weather?q=" + cityNameEncoded + "&lang=" + lang + "&units=metric&&APPID=1b1a14fc9f3424c03af8a8da7a21c62d";
+            URL[1] = "http://api.openweathermap.org/data/2.5/forecast?q=" + cityNameEncoded + "&lang=" + lang + "&units=metric&&APPID=1b1a14fc9f3424c03af8a8da7a21c62d";
+
+        } else {
+            URL[0] = "http://api.openweathermap.org/data/2.5/weather?q=" + cityNameEncoded + "," + countryCode + "&lang=" + lang + "&units=metric&&APPID=1b1a14fc9f3424c03af8a8da7a21c62d";
+            URL[1] = "http://api.openweathermap.org/data/2.5/forecast?q=" + cityNameEncoded + "," + countryCode + "&lang=" + lang + "&units=metric&&APPID=1b1a14fc9f3424c03af8a8da7a21c62d";
+
+        }
+
+        saveURLs(URL[0], URL[1]);
         return URL;
     }
 
@@ -232,16 +245,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void saveCity(boolean doSave) {
-        sPref = getPreferences(MODE_PRIVATE);
+        // sPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = sPref.edit();
-        ed.putString(SAVED_CITY, EditTcityName.getText().toString());
+        ed.putString(SAVED_CITY, EditTcityName.getText().toString().trim());
         //need city name any way, use "doSave" to know if user wants to get city inserted automaticly
         ed.putBoolean(DO_SAVE, doSave);
         ed.commit();
     }
 
     void saveCountry(String code, String countryName) {
-        sPref = getPreferences(MODE_PRIVATE);
+        //  sPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = sPref.edit();
         ed.putString(SAVED_COUNTRY_CODE, code);
         ed.putString(SAVED_COUNTRY, countryName);
@@ -250,9 +263,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     void saveLang(String lang) {
         this.lang = lang;
-        sPref = getPreferences(MODE_PRIVATE);
+        //   sPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = sPref.edit();
         ed.putString(SAVED_LANG, lang);
+        ed.commit();
+
+    }
+
+    void saveURLs(String w, String f) {
+
+        //    sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString(URLw, w);
+        ed.putString(URLf, f);
         ed.commit();
 
     }
@@ -277,8 +300,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     boolean hasSavedWeather() {
-        // sPref = getPreferences(MODE_PRIVATE);
-        return sPref.contains("SAVED_CITY") && (!sPref.getString(SAVED_CITY, "").equals("")) && sPref.contains(SAVED_LANG);
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sPref != null)
+            return sPref.contains("SAVED_CITY") && (!sPref.getString(SAVED_CITY, "").equals("")) && sPref.contains(SAVED_LANG);
+        else return false;
     }
 
     public void alertError(String msg) {

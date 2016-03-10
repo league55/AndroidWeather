@@ -2,6 +2,7 @@ package com.vk.breaethdeeper.myapplication.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,18 +42,23 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_weather);
         setCustomActionBar();
         weatherHandler = new WeatherHandler(this);
         weatherParcer = new WeatherParcer();
 
-        URL = getIntent().getStringArrayExtra("URL");
-        city = getIntent().getStringExtra(MainActivity.SAVED_CITY);
-
-
-        weather = weatherHandler.updateWeather(URL, weather, forecast);
+        if (weather == null) weather = new Weather();
+        //city = getSharedPreferences("preferences", MODE_PRIVATE).getString(MainActivity.SAVED_CITY,  "");
+        city = PreferenceManager.getDefaultSharedPreferences(this).getString(MainActivity.SAVED_CITY, "");
+        //  weather.setCityName(city);
         weather.setCityName(city);
+        weather = weatherHandler.updateWeather(weather, forecast);
+
         forecast = weatherHandler.forecast;
 
         ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
@@ -62,14 +70,13 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        URL = getIntent().getStringArrayExtra("URL");
+
     }
 
     private void setCustomActionBar() {
@@ -98,7 +105,7 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
             case R.id.updateButton:
                 Toast.makeText(getApplicationContext(), getString(R.string.refreshing),
                         Toast.LENGTH_LONG).show();
-                weatherHandler.updateWeather(URL, weather, forecast);
+                weatherHandler.updateWeather(weather, forecast);
                 if (currentWeathFrag != null) currentWeathFrag.updateUI(weather);
                 if (forecastFrag != null) forecastFrag.updateUI(forecast);
                 break;
@@ -162,7 +169,7 @@ public class ShowWeather extends AppCompatActivity implements View.OnClickListen
                     return CurrentWeathFrag.newInstance(ShowWeather.weather);
 
                 case 1:
-                    return ForecastFrag.newInstance(ShowWeather.forecast.getFiveDayWeatherStr());
+                    return ForecastFrag.newInstance(ShowWeather.forecast.getFiveDayForecast());
 
             }
             return null;

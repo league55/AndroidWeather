@@ -1,0 +1,18 @@
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rain1"
+    android:oneshot="false">
+
+    <item
+        android:drawable="@drawable/r2_frame0"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/r2_frame1"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/r2_frame2"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/r2_frame3"
+        android:duration="100" />
+
+</animation-list>

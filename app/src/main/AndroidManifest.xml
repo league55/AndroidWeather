@@ -23,7 +23,7 @@
         <activity
             android:name=".activities.AppPreferenceActivity"
             android:label="@string/settings"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/Base.V23.Theme.AppCompat.Light"></activity>
     </application>
 
 </manifest>

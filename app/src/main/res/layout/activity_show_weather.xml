@@ -57,8 +57,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
+            android:background="#4d5eb8"
             android:paddingBottom="4dp"
-            android:paddingTop="4dp" />
+            android:paddingTop="4dp"
+
+            android:textAlignment="center" />
 
     </android.support.v4.view.ViewPager>
 </LinearLayout>

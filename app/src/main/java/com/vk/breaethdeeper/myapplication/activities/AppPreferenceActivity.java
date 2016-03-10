@@ -74,9 +74,8 @@ public class AppPreferenceActivity extends PreferenceActivity {
             Log.i("PREF", "Click" + preference.getTitle());
             switch (preference.getKey()) {
                 case "SAVE_PREF":
-                    String URL = getURL();
-                    Intent intent = new Intent(getActivity(), ShowWeather.class);
-                    intent.putExtra("URL", URL);
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                     break;
             }
@@ -85,8 +84,10 @@ public class AppPreferenceActivity extends PreferenceActivity {
         }
 
 
-        private String getURL() {
+        private String commitPref() {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+
             return "http://api.openweathermap.org/data/2.5/weather?q=" + sharedPref.getString("SAVED_CITY", "") + "&lang=" + sharedPref.getString("SAVED_LANG", "en") + "&units=metric&&APPID=1b1a14fc9f3424c03af8a8da7a21c62d";
         }
     }

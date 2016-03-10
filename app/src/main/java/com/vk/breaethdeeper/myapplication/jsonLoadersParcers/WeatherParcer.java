@@ -28,11 +28,7 @@ public class WeatherParcer extends AsyncTask<String, Void, Weather> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        // Showing progress dialog
-            /*pDialog = new ProgressDialog(ShowWeather.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();*/
+
     }
 
     @Override
